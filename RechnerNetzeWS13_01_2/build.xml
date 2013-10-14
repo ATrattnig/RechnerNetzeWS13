@@ -5,32 +5,27 @@
               directory with the processing instruction <?eclipse.ant.import?>
               as the first entry and export the buildfile again. --><project basedir="." default="build" name="RechnerNetzeWS13_01_2">
     <property environment="env"/>
-    <property name="ECLIPSE_HOME" value="../../../../Programs/eclipse"/>
     <property name="debuglevel" value="source,lines,vars"/>
-    <property name="target" value="1.7"/>
-    <property name="source" value="1.7"/>
+    <property name="target" value="1.1"/>
+    <property name="source" value="1.3"/>
     <path id="RechnerNetzeWS13_01_2.classpath">
         <pathelement location="bin"/>
+    </path>
+    <path id="run.ISOConverter.bootclasspath">
+        <fileset dir="${java.home}/lib" includes="*.jar"/>
+        <fileset dir="${java.home}/lib/ext" includes="*.jar"/>
     </path>
     <target name="init">
         <mkdir dir="bin"/>
         <copy includeemptydirs="false" todir="bin">
             <fileset dir="src">
+                <exclude name="**/*.launch"/>
                 <exclude name="**/*.java"/>
             </fileset>
         </copy>
     </target>
-    <target name="dist" depends="build"
-          description="generate the distribution" >
-      <!-- Create the distribution directory -->
-      <mkdir dir="dist/lib"/>
-
-      <!-- Put everything in ${build} into the MyProject.jar file -->
-      <jar jarfile="dist/lib/RechnerNetzeWS13_01_2.jar" basedir="bin"/>
-    </target>
     <target name="clean">
         <delete dir="bin"/>
-        <delete dir="dist"/>
     </target>
     <target depends="clean" name="cleanall"/>
     <target depends="build-subprojects,build-project" name="build"/>
@@ -58,7 +53,11 @@
     </target>
     <target name="ISOConverter">
         <java classname="main.ISOConverter" failonerror="true" fork="yes">
+            <arg line="utf8files/file1.txt file2.txt"/>
             <classpath refid="RechnerNetzeWS13_01_2.classpath"/>
+            <bootclasspath>
+                <path refid="run.ISOConverter.bootclasspath"/>
+            </bootclasspath>
         </java>
     </target>
 </project>
