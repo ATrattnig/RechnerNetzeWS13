@@ -8,7 +8,7 @@ import java.net.Socket;
 
 public class SimpleHTTPServer {
 
-	static int    port = 6667;
+	static int    port = 6668;
 	
 	public static void main(String[] args) {
 		String clientSentence; 
@@ -19,12 +19,8 @@ public class SimpleHTTPServer {
 			while(true)
 			{
 				Socket connectionSocket = welcomeSocket.accept();
-				BufferedReader inFromClient = new BufferedReader(new InputStreamReader(connectionSocket.getInputStream()));
-				DataOutputStream outToClient = new DataOutputStream(connectionSocket.getOutputStream());
-				clientSentence = inFromClient.readLine();
-				capitalizedSentence = clientSentence.toUpperCase() + '\n';
-				outToClient.writeBytes(capitalizedSentence);
-				connectionSocket.close();
+				ClientHandler handler = new ClientHandler(connectionSocket, "documentRoot");
+				handler.handleClient();
 			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
